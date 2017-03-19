@@ -1,0 +1,7 @@
+foo: bar
+someInt: 1
+someFeature: T
+someOtherFeature: F
+new_relic_app_name: foo
+new_relic_enabled: f
+new_relic_licence_key: bar
