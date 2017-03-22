@@ -1,14 +1,14 @@
-package config_test
+package goconfig_test
 
 import (
-	"config"
+	"goconfig"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
 type AppConfig struct {
-	config.BaseConfig
+	goconfig.BaseConfig
 }
 
 func TestShouldSetDefaultForPort(t *testing.T) {

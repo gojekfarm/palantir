@@ -1,4 +1,4 @@
-package config
+package goconfig
 
 import (
 	"github.com/newrelic/go-agent"
