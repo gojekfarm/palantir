@@ -3,6 +3,7 @@ package goconfig_test
 import (
 	"goconfig"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -31,7 +32,7 @@ func TestShouldSetDefaultForRedisPassword(t *testing.T) {
 
 func TestShouldSetNewRelicBasedOnApplicationConfig(t *testing.T) {
 	config := &AppConfig{}
-	config.Load()
+	config.LoadWithOptions(map[string]bool{"newrelic": true})
 	assert.Equal(t, "foo", config.Newrelic().AppName)
 	assert.Equal(t, "bar", config.Newrelic().License)
 }
@@ -68,4 +69,26 @@ func TestShouldGetFeature(t *testing.T) {
 	assert.True(t, config.GetFeature("someFeature"))
 	assert.False(t, config.GetFeature("someOtherFeature"))
 	assert.False(t, config.GetFeature("someUnknownFeature"))
+}
+
+func TestShouldGetDBConfig(t *testing.T) {
+	config := &AppConfig{}
+	config.LoadWithOptions(map[string]bool{"db": true})
+	assert.Equal(t, "test://something", config.DBConfig().Url())
+	assert.Equal(t, "test://something", config.DBConfig().SlaveUrl())
+	assert.Equal(t, "postgres", config.DBConfig().Driver())
+	assert.Equal(t, 5, config.DBConfig().MaxConn())
+	assert.Equal(t, 2, config.DBConfig().IdleConn())
+	assert.Equal(t, time.Duration(1000000000), config.DBConfig().ConnMaxLifetime())
+}
+
+func TestShouldGetTestDBConfigOnLoadTestConfig(t *testing.T) {
+	config := &AppConfig{}
+	config.LoadTestConfig(map[string]bool{"db": true})
+	assert.Equal(t, "test://somethingTest", config.DBConfig().Url())
+	assert.Equal(t, "test://somethingTest", config.DBConfig().SlaveUrl())
+	assert.Equal(t, "postgres", config.DBConfig().Driver())
+	assert.Equal(t, 5, config.DBConfig().MaxConn())
+	assert.Equal(t, 2, config.DBConfig().IdleConn())
+	assert.Equal(t, time.Duration(1000000000), config.DBConfig().ConnMaxLifetime())
 }

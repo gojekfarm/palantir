@@ -5,3 +5,10 @@ someOtherFeature: F
 new_relic_app_name: foo
 new_relic_enabled: f
 new_relic_licence_key: bar
+db_driver: postgres
+db_url: test://something
+db_slave_url: test://something
+db_url_test: test://somethingTest
+db_max_conn: 5
+db_idle_conn: 2
+db_conn_max_lifetime: 1
