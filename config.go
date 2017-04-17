@@ -1,8 +1,6 @@
 package goconfig
 
 import (
-	"fmt"
-
 	"github.com/newrelic/go-agent"
 	"github.com/spf13/viper"
 )
@@ -20,26 +18,34 @@ type BaseConfig struct {
 }
 
 func (self BaseConfig) Load() {
-	self.LoadWithOptions(map[string]bool{})
+	self.LoadWithOptions(map[string]interface{}{})
 }
 
-func (self BaseConfig) LoadWithOptions(options map[string]bool) {
+func (self BaseConfig) LoadWithOptions(options map[string]interface{}) error {
 	viper.SetDefault("port", "3000")
 	viper.SetDefault("log_level", "warn")
 	viper.SetDefault("redis_password", "")
 	viper.AutomaticEnv()
 	viper.SetConfigName("application")
-	viper.AddConfigPath("./")
-	viper.AddConfigPath("../")
+	if options["configPath"] != nil {
+		viper.AddConfigPath(options["configPath"].(string))
+	} else {
+		viper.AddConfigPath("./")
+		viper.AddConfigPath("../")
+	}
 	viper.SetConfigType("yaml")
-	viper.ReadInConfig()
+	err := viper.ReadInConfig()
+	if err != nil {
+		return err
+	}
 	config = configuration{}
-	if options["newrelic"] {
+	if options["newrelic"] != nil && options["newrelic"].(bool) {
 		config["newrelic"] = getNewRelicConfigOrPanic()
 	}
-	if options["db"] {
+	if options["db"] != nil && options["db"].(bool) {
 		config["db_config"] = LoadDbConf()
 	}
+	return nil
 }
 
 func (self BaseConfig) setTestDBUrl(dbConf *DBConfig) {
@@ -47,9 +53,9 @@ func (self BaseConfig) setTestDBUrl(dbConf *DBConfig) {
 	dbConf.slaveUrl = getStringOrPanic("db_url_test")
 }
 
-func (self BaseConfig) LoadTestConfig(options map[string]bool) error {
+func (self BaseConfig) LoadTestConfig(options map[string]interface{}) error {
 	self.LoadWithOptions(options)
-	if options["db"] {
+	if options["db"] != nil && options["db"].(bool) {
 		self.setTestDBUrl(config["db_config"].(*DBConfig))
 	}
 	return nil
@@ -71,7 +77,6 @@ func (self BaseConfig) GetValue(key string) string {
 }
 
 func (self BaseConfig) GetOptionalValue(key string, defaultValue string) string {
-	fmt.Println(config)
 	if _, ok := config[key]; !ok {
 		var value string
 		if value = viper.GetString(key); !viper.IsSet(key) {
