@@ -21,7 +21,7 @@ func (self BaseConfig) Load() {
 	self.LoadWithOptions(map[string]interface{}{})
 }
 
-func (self BaseConfig) LoadWithOptions(options map[string]interface{}) error {
+func (self BaseConfig) LoadWithOptions(options map[string]interface{}) {
 	viper.SetDefault("port", "3000")
 	viper.SetDefault("log_level", "warn")
 	viper.SetDefault("redis_password", "")
@@ -34,10 +34,7 @@ func (self BaseConfig) LoadWithOptions(options map[string]interface{}) error {
 		viper.AddConfigPath("../")
 	}
 	viper.SetConfigType("yaml")
-	err := viper.ReadInConfig()
-	if err != nil {
-		return err
-	}
+	viper.ReadInConfig()
 	config = configuration{}
 	if options["newrelic"] != nil && options["newrelic"].(bool) {
 		config["newrelic"] = getNewRelicConfigOrPanic()
@@ -45,7 +42,6 @@ func (self BaseConfig) LoadWithOptions(options map[string]interface{}) error {
 	if options["db"] != nil && options["db"].(bool) {
 		config["db_config"] = LoadDbConf()
 	}
-	return nil
 }
 
 func (self BaseConfig) setTestDBUrl(dbConf *DBConfig) {

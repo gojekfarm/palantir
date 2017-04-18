@@ -114,12 +114,3 @@ func TestShouldSetConfigPathBasedOnOptionaParam(t *testing.T) {
 	config.LoadWithOptions(map[string]interface{}{"configPath": "/tmp"})
 	assert.Equal(t, "9998", config.GetValue("foo"))
 }
-
-func TestShouldReturnErrorOnInvalidConfig(t *testing.T) {
-	defer viper.Reset()
-	config := &AppConfig{}
-	confData := []byte("foo9998\n")
-	ioutil.WriteFile("/tmp/application.yml", confData, 0644)
-	err := config.LoadWithOptions(map[string]interface{}{"configPath": "/tmp"})
-	assert.NotNil(t, err)
-}
