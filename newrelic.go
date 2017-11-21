@@ -6,7 +6,7 @@ import (
 )
 
 func getNewRelicConfigOrPanic() newrelic.Config {
-	config := newrelic.NewConfig(viper.GetString("new_relic_app_name"), viper.GetString("new_relic_licence_key"))
-	config.Enabled = getFeature("new_relic_enabled")
+	config := newrelic.NewConfig(viper.GetString("NEW_RELIC_APP_NAME"), viper.GetString("NEW_RELIC_LICENCE_KEY"))
+	config.Enabled = getFeature("NEW_RELIC_ENABLED")
 	return config
 }
