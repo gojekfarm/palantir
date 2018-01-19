@@ -1,10 +1,17 @@
-package: goconfig
+package: github.com/gojektech/palantir
+homepage: https://gojek.tech/palantir
+license: Apache-2.0
+owners:
+- name: GO-JEK Tech
+  email: tech@go-jek.com
+  homepage: https://gojek.tech
 import:
 - package: github.com/spf13/viper
 - package: github.com/newrelic/go-agent
   version: ^1.7.0
 - package: github.com/fsnotify/fsnotify
   version: ^1.4.2
+testImport:
 - package: github.com/stretchr/testify
   version: ^1.1.4
   subpackages:

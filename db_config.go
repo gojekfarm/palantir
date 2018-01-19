@@ -1,4 +1,4 @@
-package goconfig
+package palantir
 
 import "time"
 

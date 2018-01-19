@@ -1,7 +1,6 @@
-package goconfig_test
+package palantir
 
 import (
-	"goconfig"
 	"io/ioutil"
 	"testing"
 	"time"
@@ -11,7 +10,7 @@ import (
 )
 
 type AppConfig struct {
-	goconfig.BaseConfig
+	BaseConfig
 }
 
 func TestShouldSetDefaultForPort(t *testing.T) {
