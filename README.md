@@ -1,10 +1,14 @@
 # Palantir
 
+<p align="center">
+  <img src="doc/palantir-logo.png" width="360" />
+</p>
+
 ## Description
 
 Yet Another Go Config Library
 
-## Usage 
+## Usage
 ```
 go get github.com/gojektech/palantir
 ```
